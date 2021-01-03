@@ -13,10 +13,30 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Copyright from "./Copyright";
 import useStyles from "./useStyles";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  firstName: Yup.string().required("First Name missing"),
+});
 
 export default function SignUp() {
   const classes = useStyles();
   const [signedUp, setSignedUp] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log("Do we every submit?");
+      console.log(values);
+      setSignedUp(true);
+    },
+  });
+
+  const { values, errors, handleSubmit, handleChange } = formik;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -33,17 +53,18 @@ export default function SignUp() {
             Thanks for signing up! Please check your email for activation link.
           </Typography>
         ) : (
-          <form
-            className={classes.form}
-            onSubmit={(e) => {
-              e.preventDefault();
-              setSignedUp(true);
-            }}
-            noValidate
-          >
+          <form className={classes.form} onSubmit={handleSubmit} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={values.firstName}
+                  onChange={handleChange}
+                  placeholder="First Name"
+                />
+                {/* <TextField
                   autoComplete="fname"
                   name="firstName"
                   variant="outlined"
@@ -52,7 +73,10 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
-                />
+                  value={values.firstName}
+                  onChange={handleChange}
+                  helperText={errors.firstName ? errors.firstName : ""}
+                /> */}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -103,6 +127,11 @@ export default function SignUp() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={() => {
+                console.log("im clicked");
+                console.log(values);
+                handleSubmit();
+              }}
             >
               Sign Up
             </Button>
