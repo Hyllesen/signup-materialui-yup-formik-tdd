@@ -57,6 +57,8 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <label htmlFor="firstName">First Name</label>
+                {/* Just used a simple input element to 
+                ensure it's not Material-ui causing problems*/}
                 <input
                   type="text"
                   id="firstName"
