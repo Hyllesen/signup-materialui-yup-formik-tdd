@@ -36,4 +36,15 @@ describe("Sign up component", () => {
       "Thanks for signing up! Please check your email for activation link."
     );
   });
+
+  test("Form validation messages on no values submit", () => {
+    userEvent.click(signUpBtn);
+
+    screen.getByText("First Name missing");
+
+    const confirmation = screen.queryByText(
+      "Thanks for signing up! Please check your email for activation link."
+    );
+    expect(confirmation).toBeNull();
+  });
 });
